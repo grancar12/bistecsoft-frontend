@@ -1,1 +1,127 @@
 /* You can add global styles to this file, and also import other style files */
+// Variables
+:root {
+  --primary: #2E75B6;
+  --primary-dark: #1F3864;
+  --sidebar-width: 250px;
+  --topbar-height: 60px;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f6f9;
+  color: #333;
+}
+
+// Sidebar
+.sidebar {
+  width: var(--sidebar-width);
+  min-height: 100vh;
+  background: var(--primary-dark);
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 100;
+
+  .sidebar-brand {
+    height: var(--topbar-height);
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    h5 { color: #fff; margin: 0; font-weight: 700; letter-spacing: 1px; }
+  }
+
+  .nav-link {
+    color: rgba(255,255,255,0.75);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+
+    i { font-size: 1.1rem; }
+
+    &:hover, &.active {
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      border-left-color: #fff;
+    }
+  }
+}
+
+// Main content
+.main-content {
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+}
+
+// Topbar
+.topbar {
+  height: var(--topbar-height);
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+
+// Page content
+.page-content {
+  padding: 1.5rem;
+}
+
+// Cards
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.card-header {
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 12px 12px 0 0 !important;
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+}
+
+// Buttons
+.btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  &:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+}
+
+// Tables
+.table th {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #666;
+  border-top: none;
+}
+
+// Badges
+.badge { font-weight: 500; }
+
+// Auth pages
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
+}

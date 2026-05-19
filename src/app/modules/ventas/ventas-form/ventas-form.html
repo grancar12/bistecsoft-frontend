@@ -1,0 +1,140 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h5 class="fw-bold mb-1">Nueva venta</h5>
+    <p class="text-muted small mb-0">Registra una nueva venta con sus productos</p>
+  </div>
+  <a routerLink="/ventas" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left me-1"></i>Volver
+  </a>
+</div>
+
+<div *ngIf="error" class="alert alert-danger py-2 small">
+  <i class="bi bi-exclamation-circle me-2"></i>{{ error }}
+</div>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="row g-3">
+
+    <!-- Datos generales -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-info-circle me-2 text-primary"></i>Datos generales
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Cliente <span class="text-danger">*</span></label>
+              <select formControlName="cliente_id" class="form-select"
+                [class.is-invalid]="form.get('cliente_id')?.invalid && form.get('cliente_id')?.touched">
+                <option [ngValue]="null" disabled>Selecciona un cliente</option>
+                <option *ngFor="let c of clientes" [value]="c.id">{{ c.nombre }}</option>
+              </select>
+              <div class="invalid-feedback">Selecciona un cliente</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Fecha <span class="text-danger">*</span></label>
+              <input type="date" formControlName="fecha" class="form-control"
+                [class.is-invalid]="form.get('fecha')?.invalid && form.get('fecha')?.touched">
+              <div class="invalid-feedback">La fecha es requerida</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Productos -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-box-seam me-2 text-primary"></i>Productos</span>
+          <button type="button" class="btn btn-sm btn-outline-primary"
+            (click)="agregarDetalle()">
+            <i class="bi bi-plus-lg me-1"></i>Agregar producto
+          </button>
+        </div>
+        <div class="card-body">
+
+          <div *ngIf="detalles.length === 0" class="text-center py-3 text-muted small">
+            Agrega al menos un producto a la venta
+          </div>
+
+          <div formArrayName="detalles">
+            <div *ngFor="let detalle of detalles.controls; let i = index"
+              [formGroupName]="i"
+              class="row g-2 align-items-end mb-3 pb-3"
+              [class.border-bottom]="i < detalles.length - 1">
+
+              <div class="col-md-4">
+                <label class="form-label small fw-semibold">Producto</label>
+                <select formControlName="producto_id" class="form-select form-select-sm"
+                  [class.is-invalid]="detalle.get('producto_id')?.invalid && detalle.get('producto_id')?.touched"
+                  (change)="onProductoChange(i)">
+                  <option [ngValue]="null" disabled>Seleccionar...</option>
+                  <option *ngFor="let p of productos" [value]="p.id">
+                    {{ p.nombre }} (stock: {{ p.stock }})
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-2">
+                <label class="form-label small fw-semibold">Cantidad</label>
+                <input type="number" formControlName="cantidad"
+                  class="form-control form-control-sm"
+                  [class.is-invalid]="detalle.get('cantidad')?.invalid && detalle.get('cantidad')?.touched"
+                  min="1">
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label small fw-semibold">Precio unitario</label>
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">$</span>
+                  <input type="number" formControlName="precio_unitario"
+                    class="form-control"
+                    [class.is-invalid]="detalle.get('precio_unitario')?.invalid && detalle.get('precio_unitario')?.touched">
+                </div>
+              </div>
+
+              <div class="col-md-2">
+                <label class="form-label small fw-semibold">Subtotal</label>
+                <p class="fw-bold text-success mb-0 pt-1">
+                  {{ subtotal(i) | currency:'COP':'$':'1.0-0' }}
+                </p>
+              </div>
+
+              <div class="col-md-1 text-end">
+                <button type="button" class="btn btn-sm btn-outline-danger"
+                  (click)="eliminarDetalle(i)"
+                  [disabled]="detalles.length === 1">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+        <div class="card-footer d-flex justify-content-end">
+          <div class="text-end">
+            <span class="text-muted small me-2">Total:</span>
+            <span class="fs-5 fw-bold text-success">
+              {{ total | currency:'COP':'$':'1.0-0' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="col-12">
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary px-4" [disabled]="loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+          {{ loading ? 'Registrando...' : 'Registrar venta' }}
+        </button>
+        <a routerLink="/ventas" class="btn btn-outline-secondary px-4">Cancelar</a>
+      </div>
+    </div>
+
+  </div>
+</form>

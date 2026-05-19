@@ -1,0 +1,95 @@
+<div class="mb-4">
+  <h5 class="fw-bold text-dark mb-1">Dashboard</h5>
+  <p class="text-muted small mb-0">Resumen general del sistema</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-3">
+    <div class="card h-100">
+      <div class="card-body d-flex align-items-center gap-3">
+        <div class="rounded-3 p-3" style="background: #e3f2fd">
+          <i class="bi bi-people-fill fs-4" style="color: #1565c0"></i>
+        </div>
+        <div>
+          <p class="text-muted small mb-0">Clientes</p>
+          <h4 class="fw-bold mb-0">{{ totalClientes }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-3">
+    <div class="card h-100">
+      <div class="card-body d-flex align-items-center gap-3">
+        <div class="rounded-3 p-3" style="background: #e8f5e9">
+          <i class="bi bi-box-seam-fill fs-4" style="color: #2e7d32"></i>
+        </div>
+        <div>
+          <p class="text-muted small mb-0">Productos</p>
+          <h4 class="fw-bold mb-0">{{ totalProductos }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-3">
+    <div class="card h-100">
+      <div class="card-body d-flex align-items-center gap-3">
+        <div class="rounded-3 p-3" style="background: #fff3e0">
+          <i class="bi bi-receipt fs-4" style="color: #e65100"></i>
+        </div>
+        <div>
+          <p class="text-muted small mb-0">Ventas</p>
+          <h4 class="fw-bold mb-0">{{ totalVentas }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-3">
+    <div class="card h-100">
+      <div class="card-body d-flex align-items-center gap-3">
+        <div class="rounded-3 p-3" style="background: #f3e5f5">
+          <i class="bi bi-currency-dollar fs-4" style="color: #6a1b9a"></i>
+        </div>
+        <div>
+          <p class="text-muted small mb-0">Ingresos</p>
+          <h4 class="fw-bold mb-0">{{ ingresoTotal | currency:'COP':'$':'1.0-0' }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body text-center py-4">
+        <i class="bi bi-person-plus-fill fs-1 text-primary mb-3 d-block"></i>
+        <h6 class="fw-semibold">Nuevo Cliente</h6>
+        <p class="text-muted small">Registra un nuevo cliente</p>
+        <a routerLink="/clientes/nuevo" class="btn btn-primary btn-sm px-4">Agregar</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body text-center py-4">
+        <i class="bi bi-plus-square-fill fs-1 text-success mb-3 d-block"></i>
+        <h6 class="fw-semibold">Nuevo Producto</h6>
+        <p class="text-muted small">Agrega un producto al catálogo</p>
+        <a routerLink="/productos/nuevo" class="btn btn-success btn-sm px-4">Agregar</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body text-center py-4">
+        <i class="bi bi-cart-plus-fill fs-1 mb-3 d-block" style="color: #e65100"></i>
+        <h6 class="fw-semibold">Nueva Venta</h6>
+        <p class="text-muted small">Registra una venta nueva</p>
+        <a routerLink="/ventas/nueva" class="btn btn-sm px-4" style="background:#e65100; color:#fff">Registrar</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h5 class="fw-bold mb-1">Ventas</h5>
+    <p class="text-muted small mb-0">Historial de ventas del restaurante</p>
+  </div>
+  <a routerLink="/ventas/nueva" class="btn btn-primary">
+    <i class="bi bi-plus-lg me-2"></i>Nueva venta
+  </a>
+</div>
+
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div *ngIf="!loading && ventas.length === 0" class="text-center py-5 text-muted">
+      <i class="bi bi-receipt fs-1 d-block mb-2"></i>
+      No hay ventas registradas aún.
+    </div>
+
+    <table *ngIf="!loading && ventas.length > 0" class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Cliente</th>
+          <th>Fecha</th>
+          <th>Total</th>
+          <th>Productos</th>
+          <th class="text-end">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let venta of ventas">
+          <tr>
+            <td class="text-muted small">{{ venta.id }}</td>
+            <td class="fw-semibold">{{ venta.cliente?.nombre }}</td>
+            <td>{{ venta.fecha | date:'dd/MM/yyyy' }}</td>
+            <td class="fw-bold text-success">
+              {{ venta.total | currency:'COP':'$':'1.0-0' }}
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-secondary"
+                (click)="toggleDetalles(venta.id)">
+                <i class="bi bi-eye me-1"></i>
+                {{ venta.detalles?.length }} items
+              </button>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-danger"
+                (click)="eliminar(venta.id)"
+                [disabled]="eliminando === venta.id">
+                <span *ngIf="eliminando === venta.id"
+                  class="spinner-border spinner-border-sm"></span>
+                <i *ngIf="eliminando !== venta.id" class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+          <!-- Fila expandible con detalles -->
+          <tr *ngIf="ventaExpandida === venta.id">
+            <td colspan="6" class="p-0">
+              <div class="bg-light p-3">
+                <p class="small fw-semibold text-muted mb-2">Detalle de productos</p>
+                <table class="table table-sm table-bordered mb-0 bg-white">
+                  <thead>
+                    <tr class="table-secondary">
+                      <th>Producto</th>
+                      <th>Cantidad</th>
+                      <th>Precio unitario</th>
+                      <th>Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let detalle of venta.detalles">
+                      <td>{{ detalle.producto?.nombre }}</td>
+                      <td>{{ detalle.cantidad }}</td>
+                      <td>{{ detalle.precio_unitario | currency:'COP':'$':'1.0-0' }}</td>
+                      <td class="fw-semibold">{{ detalle.subtotal | currency:'COP':'$':'1.0-0' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

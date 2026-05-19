@@ -1,0 +1,81 @@
+<div class="auth-wrapper">
+  <div class="card auth-card shadow-lg">
+    <div class="card-body p-5">
+
+      <div class="text-center mb-4">
+        <h4 class="fw-bold text-primary mb-1">Crear cuenta</h4>
+        <p class="text-muted small">Completa los datos para registrarte</p>
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger py-2 small">
+        <i class="bi bi-exclamation-circle me-2"></i>{{ error }}
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Nombre completo</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0">
+              <i class="bi bi-person text-muted"></i>
+            </span>
+            <input type="text" formControlName="name"
+              class="form-control border-start-0"
+              [class.is-invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+              placeholder="Tu nombre">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Correo electrónico</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0">
+              <i class="bi bi-envelope text-muted"></i>
+            </span>
+            <input type="email" formControlName="email"
+              class="form-control border-start-0"
+              [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+              placeholder="correo@ejemplo.com">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0">
+              <i class="bi bi-lock text-muted"></i>
+            </span>
+            <input type="password" formControlName="password"
+              class="form-control border-start-0"
+              [class.is-invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+              placeholder="Mínimo 8 caracteres">
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Confirmar contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0">
+              <i class="bi bi-lock-fill text-muted"></i>
+            </span>
+            <input type="password" formControlName="password_confirmation"
+              class="form-control border-start-0"
+              placeholder="Repite la contraseña">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold"
+          [disabled]="loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+          {{ loading ? 'Registrando...' : 'Crear cuenta' }}
+        </button>
+      </form>
+
+      <hr class="my-4">
+      <p class="text-center text-muted small mb-0">
+        ¿Ya tienes cuenta?
+        <a routerLink="/login" class="text-primary fw-semibold">Inicia sesión</a>
+      </p>
+
+    </div>
+  </div>
+</div>
