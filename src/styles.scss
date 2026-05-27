@@ -1,34 +1,69 @@
-/* You can add global styles to this file, and also import other style files */
+/* ============================================
+   BISTECSOFT — Global Styles
+   El Sazón color palette
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@500;600;700&display=swap');
+
 // Variables
 :root {
-  --primary: #2E75B6;
-  --primary-dark: #1F3864;
-  --sidebar-width: 250px;
-  --topbar-height: 60px;
+  /* Paleta El Sazón */
+  --color-1: #f05a28;   /* naranja */
+  --color-2: #f4bf01;   /* amarillo */
+  --color-3: #f8e74f;   /* amarillo claro */
+  --color-4: #71d1c2;   /* turquesa */
+  --color-5: #417786;   /* azul-verde */
+
+  /* Reemplaza los anteriores --primary */
+  --primary:       #f05a28;
+  --primary-dark:  #417786;
+
+  --sidebar-width:   250px;
+  --topbar-height:   60px;
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
   background-color: #f4f6f9;
   color: #333;
+  
+}
+h4{
+  font-family: 'Poppins', sans-serif;
+}
+a {
+  text-decoration: none;
 }
 
-// Sidebar
+// ── Sidebar ──────────────────────────────────
 .sidebar {
   width: var(--sidebar-width);
   min-height: 100vh;
-  background: var(--primary-dark);
+  background: linear-gradient(160deg, var(--primary-dark) 0%, #71d1c2 100%);
   position: fixed;
   top: 0; left: 0;
   z-index: 100;
+  box-shadow: 3px 0 15px rgba(0,0,0,.15);
 
   .sidebar-brand {
-    height: var(--topbar-height);
+    height: auto;
+    min-height: var(--topbar-height);
     display: flex;
+    flex-direction: column;
     align-items: center;
-    padding: 0 1.5rem;
+    justify-content: center;
+    padding: 16px 1.5rem 12px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
-    h5 { color: #fff; margin: 0; font-weight: 700; letter-spacing: 1px; }
+
+
+    /* Subtítulo opcional bajo el logo */
+    small {
+      font-size: .62rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.40);
+      margin-top: 5px;
+      font-family: 'Poppins', sans-serif;
+    }
   }
 
   .nav-link {
@@ -39,24 +74,31 @@ body {
     gap: 0.75rem;
     transition: all 0.2s;
     border-left: 3px solid transparent;
+    font-weight: 600;
 
     i { font-size: 1.1rem; }
 
     &:hover, &.active {
       color: #fff;
       background: rgba(255,255,255,0.08);
-      border-left-color: #fff;
+      border-left-color: var(--color-1);
+    }
+
+    &.active {
+      background: rgba(240,90,40,0.18);
+      border-left-color: var(--color-1);
+      color: #fff;
     }
   }
 }
 
-// Main content
+// ── Main content ─────────────────────────────
 .main-content {
   margin-left: var(--sidebar-width);
   min-height: 100vh;
 }
 
-// Topbar
+// ── Topbar ───────────────────────────────────
 .topbar {
   height: var(--topbar-height);
   background: #fff;
@@ -68,18 +110,21 @@ body {
   position: sticky;
   top: 0;
   z-index: 99;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
 }
 
-// Page content
+// ── Page content ─────────────────────────────
 .page-content {
   padding: 1.5rem;
 }
 
-// Cards
+// ── Cards ────────────────────────────────────
 .card {
   border: none;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  transition: box-shadow .2s;
+  &:hover { box-shadow: 0 6px 20px rgba(0,0,0,.10); }
 }
 
 .card-header {
@@ -87,36 +132,82 @@ body {
   border-bottom: 1px solid #f0f0f0;
   border-radius: 12px 12px 0 0 !important;
   padding: 1rem 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
 }
 
-// Buttons
+// ── Buttons ──────────────────────────────────
 .btn-primary {
   background: var(--primary);
   border-color: var(--primary);
-  &:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+  font-weight: 700;
+  &:hover, &:focus {
+    background: #c94718;
+    border-color: #c94718;
+    box-shadow: 0 4px 14px rgba(240,90,40,.35);
+  }
 }
 
-// Tables
+.btn-outline-primary {
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 700;
+  &:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+  }
+}
+
+// ── Tables ───────────────────────────────────
 .table th {
-  font-weight: 600;
-  font-size: 0.85rem;
+  font-weight: 700;
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #666;
   border-top: none;
+  background: #f8fafc;
+  font-family: 'Poppins', sans-serif;
 }
 
-// Badges
-.badge { font-weight: 500; }
+.table-hover tbody tr:hover {
+  background: #fff8f5;
+}
 
-// Auth pages
+// ── Badges ───────────────────────────────────
+.badge { font-weight: 600; }
+
+// ── Forms ────────────────────────────────────
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(240,90,40,.15);
+}
+
+// ── Auth pages ───────────────────────────────
 .auth-wrapper {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  background-image: url('/imagenes/ccc.jpg');
+  background-size: 400px 400px;  // ← controla el tamaño del patrón
+  background-repeat: repeat;      // ← lo repite como mosaico
+  background-position: center;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(2px);
+  }
+
+  .auth-card {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .auth-card {
@@ -125,3 +216,9 @@ body {
   border-radius: 16px !important;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
 }
+
+// ── Scrollbar ────────────────────────────────
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f0f4f8; }
+::-webkit-scrollbar-thumb { background: #c5cdd8; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }

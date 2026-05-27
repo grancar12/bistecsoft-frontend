@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -20,6 +20,7 @@ export class VentasFormComponent implements OnInit {
   private clienteService = inject(ClienteService);
   private productoService = inject(ProductoService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   clientes: Cliente[] = [];
   productos: Producto[] = [];
@@ -45,8 +46,14 @@ export class VentasFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.clienteService.getAll().subscribe(r => this.clientes = r.data);
-    this.productoService.getAll().subscribe(r => this.productos = r.data);
+    this.clienteService.getAll().subscribe({
+      next: r => { this.clientes = r.data; this.cdr.detectChanges(); },
+      error: () => {}
+    });
+    this.productoService.getAll().subscribe({
+      next: r => { this.productos = r.data; this.cdr.detectChanges(); },
+      error: () => {}
+    });
     this.agregarDetalle();
   }
 
@@ -68,11 +75,7 @@ export class VentasFormComponent implements OnInit {
     if (producto) {
       this.detalles.at(index).patchValue({ precio_unitario: producto.precio });
     }
-  }
-
-  getProducto(index: number): Producto | undefined {
-    const id = this.detalles.at(index).get('producto_id')?.value;
-    return this.productos.find(p => p.id === +id);
+    this.cdr.detectChanges();
   }
 
   subtotal(index: number): number {
@@ -81,8 +84,21 @@ export class VentasFormComponent implements OnInit {
     return cantidad * precio;
   }
 
+  // Verifica si el producto en el índice dado está agotado
+  productoAgotado(index: number): boolean {
+    const productoId = this.detalles.at(index).get('producto_id')?.value;
+    if (!productoId) return false;
+    const producto = this.productos.find(p => p.id === +productoId);
+    return producto ? producto.stock === 0 : false;
+  }
+
+  // Verifica si hay algún producto agotado en la lista
+  hayProductosAgotados(): boolean {
+    return this.detalles.controls.some((_, i) => this.productoAgotado(i));
+  }
+
   submit(): void {
-    if (this.form.invalid || this.detalles.length === 0) {
+    if (this.form.invalid || this.detalles.length === 0 || this.hayProductosAgotados()) {
       this.form.markAllAsTouched();
       return;
     }
@@ -94,6 +110,7 @@ export class VentasFormComponent implements OnInit {
       error: (err) => {
         this.error = err.error?.message || 'Error al registrar la venta';
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }

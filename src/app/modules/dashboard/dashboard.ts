@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ClienteService } from '../../core/services/cliente.service';
@@ -14,6 +14,7 @@ export class DashboardComponent implements OnInit {
   private clienteService = inject(ClienteService);
   private productoService = inject(ProductoService);
   private ventaService = inject(VentaService);
+  private cdr = inject(ChangeDetectorRef);
 
   totalClientes = 0;
   totalProductos = 0;
@@ -21,11 +22,23 @@ export class DashboardComponent implements OnInit {
   ingresoTotal = 0;
 
   ngOnInit(): void {
-    this.clienteService.getAll().subscribe(r => this.totalClientes = r.data.length);
-    this.productoService.getAll().subscribe(r => this.totalProductos = r.data.length);
-    this.ventaService.getAll().subscribe(r => {
-      this.totalVentas = r.data.length;
-      this.ingresoTotal = r.data.reduce((acc, v) => acc + Number(v.total), 0);
+    this.clienteService.getAll().subscribe({
+      next: r => { this.totalClientes = r.data.length; this.cdr.detectChanges(); },
+      error: () => {}
+    });
+
+    this.productoService.getAll().subscribe({
+      next: r => { this.totalProductos = r.data.length; this.cdr.detectChanges(); },
+      error: () => {}
+    });
+
+    this.ventaService.getAll().subscribe({
+      next: r => {
+        this.totalVentas = r.data.length;
+        this.ingresoTotal = r.data.reduce((acc, v) => acc + Number(v.total), 0);
+        this.cdr.detectChanges();
+      },
+      error: () => {}
     });
   }
 }

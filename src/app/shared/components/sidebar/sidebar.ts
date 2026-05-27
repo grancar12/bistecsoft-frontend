@@ -8,6 +8,7 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './sidebar.html',
+  styleUrl: './sidebar.scss'
 })
 export class SidebarComponent {
   private authService = inject(AuthService);

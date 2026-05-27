@@ -1,6 +1,7 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { catchError, of } from 'rxjs';
 import { ProductoService } from '../../../core/services/producto.service';
 import { Producto } from '../../../core/models/producto';
 
@@ -12,7 +13,6 @@ import { Producto } from '../../../core/models/producto';
 })
 export class ProductosListaComponent implements OnInit {
   private productoService = inject(ProductoService);
-  private cdr = inject(ChangeDetectorRef);
 
   productos: Producto[] = [];
   loading = true;
@@ -26,16 +26,16 @@ export class ProductosListaComponent implements OnInit {
   cargar(): void {
     this.loading = true;
     this.error = '';
-    this.productoService.getAll().subscribe({
+    this.productoService.getAll().pipe(
+      catchError(() => of({ data: [] as Producto[] }))
+    ).subscribe({
       next: (r) => {
         this.productos = r.data;
         this.loading = false;
-        this.cdr.detectChanges();
       },
       error: () => {
         this.error = 'Error al cargar productos';
         this.loading = false;
-        this.cdr.detectChanges();
       }
     });
   }
@@ -47,12 +47,10 @@ export class ProductosListaComponent implements OnInit {
       next: () => {
         this.productos = this.productos.filter(p => p.id !== id);
         this.eliminando = null;
-        this.cdr.detectChanges();
       },
       error: () => {
         this.error = 'Error al eliminar producto';
         this.eliminando = null;
-        this.cdr.detectChanges();
       }
     });
   }

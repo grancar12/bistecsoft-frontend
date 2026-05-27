@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ClienteService } from '../../../core/services/cliente.service';
@@ -12,6 +12,7 @@ import { Cliente } from '../../../core/models/cliente';
 })
 export class ClientesListaComponent implements OnInit {
   private clienteService = inject(ClienteService);
+  private cdr = inject(ChangeDetectorRef);
 
   clientes: Cliente[] = [];
   loading = true;
@@ -24,9 +25,18 @@ export class ClientesListaComponent implements OnInit {
 
   cargar(): void {
     this.loading = true;
+    this.error = '';
     this.clienteService.getAll().subscribe({
-      next: (r) => { this.clientes = r.data; this.loading = false; },
-      error: () => { this.error = 'Error al cargar clientes'; this.loading = false; }
+      next: (r) => {
+        this.clientes = r.data;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.error = 'Error al cargar clientes';
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -34,8 +44,16 @@ export class ClientesListaComponent implements OnInit {
     if (!confirm('¿Estás seguro de eliminar este cliente?')) return;
     this.eliminando = id;
     this.clienteService.delete(id).subscribe({
-      next: () => { this.clientes = this.clientes.filter(c => c.id !== id); this.eliminando = null; },
-      error: () => { this.error = 'Error al eliminar cliente'; this.eliminando = null; }
+      next: () => {
+        this.clientes = this.clientes.filter(c => c.id !== id);
+        this.eliminando = null;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.error = 'Error al eliminar cliente';
+        this.eliminando = null;
+        this.cdr.detectChanges();
+      }
     });
   }
 }

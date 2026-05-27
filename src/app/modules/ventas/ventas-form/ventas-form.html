@@ -71,10 +71,18 @@
                   [class.is-invalid]="detalle.get('producto_id')?.invalid && detalle.get('producto_id')?.touched"
                   (change)="onProductoChange(i)">
                   <option [ngValue]="null" disabled>Seleccionar...</option>
-                  <option *ngFor="let p of productos" [value]="p.id">
-                    {{ p.nombre }} (stock: {{ p.stock }})
+                  <option *ngFor="let p of productos"
+                    [value]="p.id"
+                    [disabled]="p.stock === 0"
+                    [style.color]="p.stock === 0 ? '#aaa' : ''"
+                    [style.font-style]="p.stock === 0 ? 'italic' : ''">
+                    {{ p.nombre }} {{ p.stock === 0 ? '(Agotado)' : '(stock: ' + p.stock + ')' }}
                   </option>
                 </select>
+                <!-- Alerta si seleccionó producto agotado -->
+                <div *ngIf="productoAgotado(i)" class="text-danger small mt-1">
+                  <i class="bi bi-exclamation-triangle me-1"></i>Este producto está agotado
+                </div>
               </div>
 
               <div class="col-md-2">
@@ -128,12 +136,16 @@
     <!-- Botones -->
     <div class="col-12">
       <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary px-4" [disabled]="loading">
+        <button type="submit" class="btn btn-primary px-4" [disabled]="loading || hayProductosAgotados()">
           <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
           {{ loading ? 'Registrando...' : 'Registrar venta' }}
         </button>
         <a routerLink="/ventas" class="btn btn-outline-secondary px-4">Cancelar</a>
       </div>
+      <p *ngIf="hayProductosAgotados()" class="text-danger small mt-2">
+        <i class="bi bi-exclamation-triangle me-1"></i>
+        Retira los productos agotados para poder registrar la venta.
+      </p>
     </div>
 
   </div>
